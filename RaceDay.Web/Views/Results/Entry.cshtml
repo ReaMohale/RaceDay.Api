@@ -1,0 +1,74 @@
+﻿@model ResultsEntryViewModel
+@{
+    ViewData["Title"] = "Results entry";
+    var pending = Model.Enrolments.Where(e => !e.HasResult).ToList();
+}
+<a asp-controller="Organiser" asp-action="Events" class="rd-back">&larr; My events</a>
+<div class="my-3">
+    <p class="rd-eyebrow mb-1">Results entry</p>
+    <h1 class="rd-display-sm mb-1">@Model.Event.EventName</h1>
+    <p class="rd-meta">@Format.Date(Model.Event.EventDate) &middot; @Model.Event.Location</p>
+</div>
+
+<h2 class="h5 mb-3">Waiting for a result (@pending.Count)</h2>
+@if (pending.Count == 0)
+{
+    <div class="rd-empty mb-4"><p class="mb-0">@(Model.Enrolments.Count == 0 ? "Nobody has entered this event yet." : "Every participant has a result.")</p></div>
+}
+else
+{
+    <div class="table-responsive rd-table-wrap mb-4">
+        <table class="table rd-table align-middle mb-0">
+            <thead>
+                <tr><th>Participant</th><th>Category</th><th>Finish time (h:mm:ss)</th><th>Position</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolment in pending)
+                {
+                    <tr>
+                        <td class="fw-semibold">@enrolment.ParticipantName</td>
+                        <td>@enrolment.CategoryName</td>
+                        <td colspan="3">
+                            <form asp-controller="Results" asp-action="Capture" method="post" class="rd-inline-form">
+                                <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                <input type="hidden" name="enrolmentId" value="@enrolment.EnrolmentId" />
+                                <input name="finishTime" class="form-control form-control-sm" placeholder="0:47:31" required
+                                       pattern="\d{1,2}:[0-5]\d:[0-5]\d" title="Hours:minutes:seconds, for example 0:47:31" />
+                                <input name="position" type="number" min="1" class="form-control form-control-sm" placeholder="e.g. 47" />
+                                <button type="submit" class="btn btn-sm rd-btn-primary">Publish</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<h2 class="h5 mb-3">Published results (@Model.Results.Count)</h2>
+@if (Model.Results.Count == 0)
+{
+    <div class="rd-empty"><p class="mb-0">No results published yet.</p></div>
+}
+else
+{
+    <div class="table-responsive rd-table-wrap">
+        <table class="table rd-table align-middle mb-0">
+            <thead>
+                <tr><th>Participant</th><th>Category</th><th>Finish time</th><th>Position</th><th>Published</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model.Results)
+                {
+                    <tr>
+                        <td class="fw-semibold">@result.ParticipantName</td>
+                        <td>@result.CategoryName</td>
+                        <td class="rd-mono">@Format.Time(result.FinishTime)</td>
+                        <td>@(result.Position is null ? "-" : Format.Ordinal(result.Position.Value) + " of " + result.TotalFinishers)</td>
+                        <td>@Format.DateTimeShort(result.RecordedAt)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
