@@ -1,0 +1,72 @@
+﻿@model EventFormViewModel
+@{
+    var isEdit = Model.EventId.HasValue;
+    ViewData["Title"] = isEdit ? "Edit event" : "Create event";
+}
+<a asp-controller="Organiser" asp-action="Events" class="rd-back">&larr; My events</a>
+<h1 class="rd-display-sm my-3">@(isEdit ? "Edit event" : "Create an event")</h1>
+
+<div class="rd-panel">
+    <form asp-controller="Organiser" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.EventId : null)"
+          method="post" enctype="multipart/form-data" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+        <input type="hidden" asp-for="ExistingBannerUrl" />
+
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label asp-for="EventName" class="form-label"></label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="EventType" class="form-label"></label>
+                <select asp-for="EventType" class="form-select">
+                    <option value="">Choose...</option>
+                    <option value="Run">Run</option>
+                    <option value="Walk">Walk</option>
+                    <option value="Cycle">Cycle</option>
+                </select>
+                <span asp-validation-for="EventType" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="EventDate" class="form-label"></label>
+                <input asp-for="EventDate" class="form-control" type="date" />
+                <span asp-validation-for="EventDate" class="text-danger small"></span>
+            </div>
+            <div class="col-md-5">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="DistanceKm" class="form-label"></label>
+                <input asp-for="DistanceKm" class="form-control" type="number" step="any" />
+                <span asp-validation-for="DistanceKm" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Banner" class="form-label"></label>
+                @if (!string.IsNullOrEmpty(Model.ExistingBannerUrl))
+                {
+                    <div class="mb-2"><img src="@Model.ExistingBannerUrl" alt="Current banner" class="rd-banner-thumb" /></div>
+                }
+                <input asp-for="Banner" type="file" class="form-control" accept="image/png,image/jpeg,image/gif,image/webp" />
+                <div class="form-text">Optional. JPG, PNG, GIF or WEBP, up to 5 MB. It is stored in Azure Blob Storage.</div>
+                <span asp-validation-for="Banner" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn rd-btn-primary">@(isEdit ? "Save changes" : "Create event")</button>
+            <a asp-controller="Organiser" asp-action="Events" class="btn rd-btn-outline ms-2">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

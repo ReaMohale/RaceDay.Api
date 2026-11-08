@@ -1,0 +1,52 @@
+﻿@model List<OrganiserEventSummary>
+@{
+    ViewData["Title"] = "My events";
+}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h1 class="rd-display-sm mb-0">My events</h1>
+    <a asp-controller="Organiser" asp-action="Create" class="btn rd-btn-primary">Create an event</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="rd-empty">
+        <p>You have not created any events yet.</p>
+        <a asp-controller="Organiser" asp-action="Create" class="btn rd-btn-primary">Create your first event</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card rd-card h-100">
+                    @if (!string.IsNullOrEmpty(ev.BannerUrl))
+                    {
+                        <img src="@ev.BannerUrl" class="rd-card-img" alt="Banner for @ev.EventName" loading="lazy" />
+                    }
+                    else
+                    {
+                        <div class="rd-card-img rd-card-img--placeholder"><span class="rd-card-distance">@Format.Distance(ev.DistanceKm)</span></div>
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-2"><span class="@Format.TypeCss(ev.EventType)">@ev.EventType</span></div>
+                        <h5 class="rd-card-title">@ev.EventName</h5>
+                        <p class="rd-meta mb-1">@Format.Date(ev.EventDate) &middot; @ev.Location</p>
+                        <p class="rd-meta mb-3">@ev.CategoryCount categories &middot; @ev.EnrolmentCount enrolled</p>
+                        <div class="rd-actions mt-auto">
+                            <a asp-controller="Organiser" asp-action="Edit" asp-route-id="@ev.EventId" class="btn btn-sm rd-btn-primary">Edit</a>
+                            <a asp-controller="Categories" asp-action="Index" asp-route-eventId="@ev.EventId" class="btn btn-sm rd-btn-outline">Categories</a>
+                            <a asp-controller="EventEnrolments" asp-action="Index" asp-route-eventId="@ev.EventId" class="btn btn-sm rd-btn-outline">Enrolments</a>
+                            <a asp-controller="Results" asp-action="Entry" asp-route-eventId="@ev.EventId" class="btn btn-sm rd-btn-outline">Results</a>
+                            <form asp-controller="Organiser" asp-action="Delete" asp-route-id="@ev.EventId" method="post"
+                                  data-confirm="Delete @ev.EventName? This cannot be undone." class="d-inline">
+                                <button type="submit" class="btn btn-sm rd-btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

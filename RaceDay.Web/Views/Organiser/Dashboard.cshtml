@@ -1,0 +1,77 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var user = Context.Session.GetUser();
+}
+<div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+    <div>
+        <p class="rd-eyebrow mb-1">Organiser dashboard</p>
+        <h1 class="rd-display-sm mb-0">Welcome, @user?.FullName</h1>
+    </div>
+    <a asp-controller="Organiser" asp-action="Create" class="btn rd-btn-primary">Create an event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-4">
+        <div class="rd-stat"><span class="rd-stat-num">@Model.Events.Count</span><span class="rd-stat-label">Events created</span></div>
+    </div>
+    <div class="col-sm-4">
+        <div class="rd-stat"><span class="rd-stat-num">@Model.TotalEnrolments</span><span class="rd-stat-label">Total enrolments</span></div>
+    </div>
+    <div class="col-sm-4">
+        <div class="rd-stat"><span class="rd-stat-num">@Model.UpcomingCount</span><span class="rd-stat-label">Upcoming events</span></div>
+    </div>
+</div>
+
+@if (Model.NextEvent is not null)
+{
+    <div class="rd-panel rd-next mb-4">
+        <div>
+            <div class="rd-meta">Next event</div>
+            <div class="h5 mb-0">@Model.NextEvent.EventName</div>
+            <div class="rd-meta">@Format.Date(Model.NextEvent.EventDate) &middot; @Model.NextEvent.Location</div>
+        </div>
+        <a asp-controller="EventEnrolments" asp-action="Index" asp-route-eventId="@Model.NextEvent.EventId" class="btn rd-btn-outline">View enrolments</a>
+    </div>
+}
+
+@if (Model.Events.Count == 0)
+{
+    <div class="rd-empty">
+        <p>You have not created any events yet.</p>
+        <a asp-controller="Organiser" asp-action="Create" class="btn rd-btn-primary">Create your first event</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive rd-table-wrap">
+        <table class="table rd-table align-middle mb-0">
+            <thead>
+                <tr><th>Event</th><th>Date</th><th>Categories</th><th>Enrolments</th><th>Results</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var ev in Model.Events)
+                {
+                    var past = ev.EventDate < DateOnly.FromDateTime(DateTime.Today);
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">@ev.EventName</div>
+                            <div class="rd-meta">@ev.Location</div>
+                        </td>
+                        <td>@Format.ShortDate(ev.EventDate) @if (past) {
+                            <span class="badge text-bg-secondary ms-1">Past</span>
+                        }
+                    </td>
+                    <td>@ev.CategoryCount</td>
+                    <td><strong>@ev.EnrolmentCount</strong></td>
+                    <td>@ev.ResultCount / @ev.EnrolmentCount</td>
+                    <td class="text-end">
+                        <a asp-controller="EventEnrolments" asp-action="Index" asp-route-eventId="@ev.EventId" class="btn btn-sm rd-btn-outline">Enrolments</a>
+                        <a asp-controller="Results" asp-action="Entry" asp-route-eventId="@ev.EventId" class="btn btn-sm rd-btn-outline">Results</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
