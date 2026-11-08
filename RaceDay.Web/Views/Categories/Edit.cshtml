@@ -1,0 +1,17 @@
+﻿@model CategoryFormViewModel
+@{
+    ViewData["Title"] = "Edit category";
+}
+<a asp-controller="Categories" asp-action="Index" asp-route-eventId="@Model.EventId" class="rd-back">&larr; Categories</a>
+<h1 class="rd-display-sm my-3">Edit category</h1>
+@if (ViewData["EventName"] is string eventName)
+{
+    <p class="rd-meta">@eventName</p>
+}
+<div class="rd-panel">
+    <partial name="_CategoryForm" model="Model" />
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Categories\" />
     <Folder Include="Views\EventEnrolments\" />
     <Folder Include="Views\Events\" />
     <Folder Include="Views\Results\" />

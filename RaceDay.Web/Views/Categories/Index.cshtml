@@ -1,0 +1,54 @@
+﻿@model CategoriesViewModel
+@{
+    ViewData["Title"] = "Categories";
+}
+<a asp-controller="Organiser" asp-action="Events" class="rd-back">&larr; My events</a>
+<div class="my-3">
+    <p class="rd-eyebrow mb-1">Categories</p>
+    <h1 class="rd-display-sm mb-1">@Model.Event.EventName</h1>
+    <p class="rd-meta">@Format.Date(Model.Event.EventDate) &middot; @Model.Event.Location</p>
+</div>
+
+<div class="rd-panel mb-4">
+    <h2 class="h5 mb-3">Add a category</h2>
+    <partial name="_CategoryForm" model="Model.NewCategory" />
+</div>
+
+@if (Model.Categories.Count == 0)
+{
+    <div class="rd-empty">
+        <p class="mb-0">No categories yet. Add age or distance categories so participants can enter.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive rd-table-wrap">
+        <table class="table rd-table align-middle mb-0">
+            <thead>
+                <tr><th>Category</th><th>Distance</th><th>Entry fee</th><th>Spots taken</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td class="fw-semibold">@category.CategoryName</td>
+                        <td>@Format.Distance(category.DistanceKm)</td>
+                        <td>@Format.Money(category.EntryFee)</td>
+                        <td>@category.SpotsTaken / @category.MaxParticipants</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-eventId="@Model.Event.EventId" asp-route-id="@category.CategoryId" class="btn btn-sm rd-btn-outline">Edit</a>
+                            <form asp-action="Delete" asp-route-eventId="@Model.Event.EventId" asp-route-id="@category.CategoryId" method="post"
+                                  data-confirm="Delete the category @category.CategoryName?" class="d-inline">
+                                <button type="submit" class="btn btn-sm rd-btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
