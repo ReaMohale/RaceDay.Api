@@ -1,25 +1,44 @@
 using Microsoft.AspNetCore.Mvc;
 using RaceDay.Web.Models;
-using System.Diagnostics;
+using RaceDay.Web.Services;
 
-namespace RaceDay.Web.Controllers
+namespace RaceDay.Web.Controllers;
+
+public class HomeController : RaceDayController
 {
-    public class HomeController : Controller
+    public HomeController(IRaceDayApi api) : base(api)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    /// <summary>Home page: upcoming events with filtering (public).</summary>
+    public async Task<IActionResult> Index(string? type, string? search, bool upcomingOnly = true)
+    {
+        var result = await this.Api.GetEventsAsync(type, search, upcomingOnly);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        var model = new HomeViewModel
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            Events = result.Data ?? new List<EventItem>(),
+            Type = type,
+            Search = search,
+            UpcomingOnly = upcomingOnly
+        };
+
+        if (!result.Success)
+            this.ViewData["LoadError"] = result.Message;
+
+        return this.View(model);
+    }
+
+    public IActionResult Error() => this.View();
+
+    /// <summary>Friendly page for 404 and other empty error responses.</summary>
+    public IActionResult StatusPage(int code)
+    {
+        if (code < 400 || code > 599)
+            code = StatusCodes.Status404NotFound;
+
+        this.ViewData["Code"] = code;
+        this.Response.StatusCode = code;
+        return this.View();
     }
 }
