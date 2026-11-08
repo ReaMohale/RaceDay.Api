@@ -1,0 +1,65 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Create your account";
+}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="rd-panel">
+            <h1 class="rd-display-sm">Create your account</h1>
+            <form asp-action="Register" method="post" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <label class="form-label d-block">@Html.DisplayNameFor(m => m.AccountType)</label>
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" asp-for="AccountType" value="Participant" id="role-participant" />
+                        <label class="btn rd-role-choice w-100" for="role-participant">
+                            <strong>Participant</strong><br /><span class="small">Find and enter events</span>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" asp-for="AccountType" value="Organiser" id="role-organiser" />
+                        <label class="btn rd-role-choice w-100" for="role-organiser">
+                            <strong>Organiser</strong><br /><span class="small">Create and run events</span>
+                        </label>
+                    </div>
+                </div>
+                <span asp-validation-for="AccountType" class="text-danger small"></span>
+
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" autocomplete="name" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" autocomplete="tel" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn rd-btn-primary w-100">Create account</button>
+            </form>
+            <p class="mt-3 mb-0 text-center">Already registered? <a asp-action="Login">Log in</a></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
