@@ -1,0 +1,39 @@
+﻿@model EventEnrolmentsViewModel
+@{
+    ViewData["Title"] = "Enrolments";
+}
+<a asp-controller="Organiser" asp-action="Events" class="rd-back">&larr; My events</a>
+<div class="d-flex justify-content-between align-items-end flex-wrap gap-2 my-3">
+    <div>
+        <p class="rd-eyebrow mb-1">Enrolments</p>
+        <h1 class="rd-display-sm mb-1">@Model.Event.EventName</h1>
+        <p class="rd-meta mb-0">@Format.Date(Model.Event.EventDate) &middot; @Model.Event.Location &middot; @Model.Enrolments.Count enrolled</p>
+    </div>
+    <a asp-controller="Results" asp-action="Entry" asp-route-eventId="@Model.Event.EventId" class="btn rd-btn-primary">Enter results</a>
+</div>
+
+@if (Model.Enrolments.Count == 0)
+{
+    <div class="rd-empty"><p class="mb-0">Nobody has entered this event yet.</p></div>
+}
+else
+{
+    <div class="table-responsive rd-table-wrap">
+        <table class="table rd-table align-middle mb-0">
+            <thead>
+                <tr><th>Participant</th><th>Category</th><th>Entered on</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolment in Model.Enrolments)
+                {
+                    <tr>
+                        <td class="fw-semibold">@enrolment.ParticipantName</td>
+                        <td>@enrolment.CategoryName</td>
+                        <td>@Format.DateTimeShort(enrolment.EnrolmentDate)</td>
+                        <td><span class="@Format.StatusCss(enrolment.Status, enrolment.HasResult)">@Format.StatusText(enrolment.Status, enrolment.HasResult)</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

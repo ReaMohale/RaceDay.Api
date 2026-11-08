@@ -1,8 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Upcoming events";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="rd-hero">
+    <div class="rd-hero-num" aria-hidden="true">42.2</div>
+    <p class="rd-eyebrow">Built for South African road events</p>
+    <h1 class="rd-display">Every start line,<br />one <span class="rd-accent">platform.</span></h1>
+    <p class="rd-lead">Find a run, walk or cycle near you, pick your distance and enter in a few clicks.</p>
+</section>
+
+<form method="get" asp-controller="Home" asp-action="Index" class="rd-filters">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label for="search" class="form-label">Search</label>
+            <input id="search" name="search" value="@Model.Search" class="form-control" placeholder="Event name or town" />
+        </div>
+        <div class="col-md-3">
+            <label for="type" class="form-label">Event type</label>
+            <select id="type" name="type" class="form-select">
+                <option value="" selected="@string.IsNullOrEmpty(Model.Type)">All types</option>
+                <option value="Run" selected="@(Model.Type == "Run")">Run</option>
+                <option value="Walk" selected="@(Model.Type == "Walk")">Walk</option>
+                <option value="Cycle" selected="@(Model.Type == "Cycle")">Cycle</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check mb-2">
+                <input id="upcomingOnly" type="checkbox" name="upcomingOnly" value="true" class="form-check-input" checked="@Model.UpcomingOnly" />
+                <label for="upcomingOnly" class="form-check-label">Upcoming events only</label>
+                @* The hidden field must come AFTER the checkbox: when ticked the first value ("true") wins; when unticked only "false" is sent. *@
+                <input type="hidden" name="upcomingOnly" value="false" />
+            </div>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn rd-btn-primary flex-grow-1">Filter</button>
+            <a asp-controller="Home" asp-action="Index" class="btn rd-btn-outline" title="Clear filters">Clear</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.Events.Count == 0)
+{
+    <div class="rd-empty">
+        <h3 class="rd-display-sm">No events found</h3>
+        <p class="mb-0">Try a different search or untick "Upcoming events only".</p>
+    </div>
+}
+else
+{
+    <p class="rd-meta mb-3">@Model.Events.Count @(Model.Events.Count == 1 ? "event" : "events")</p>
+    <div class="row g-4">
+        @foreach (var item in Model.Events)
+        {
+            <div class="col-md-6 col-lg-4">
+                <partial name="_EventCard" model="item" />
+            </div>
+        }
+    </div>
+}

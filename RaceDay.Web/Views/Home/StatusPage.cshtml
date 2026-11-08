@@ -1,0 +1,18 @@
+﻿@{
+    var code = ViewData["Code"] is int c ? c : 404;
+    ViewData["Title"] = code == 404 ? "Page not found" : "Something went wrong";
+}
+<div class="rd-empty">
+    <p class="rd-big-code">@code</p>
+    @if (code == 404)
+    {
+        <h1 class="rd-display-sm">We could not find that page</h1>
+        <p>The page or event may have been moved or removed.</p>
+    }
+    else
+    {
+        <h1 class="rd-display-sm">Something went wrong</h1>
+        <p>Please go back and try again.</p>
+    }
+    <a asp-controller="Home" asp-action="Index" class="btn rd-btn-primary">Back to events</a>
+</div>

@@ -1,0 +1,89 @@
+﻿@model EventDetailsViewModel
+@{
+    ViewData["Title"] = Model.Event.EventName;
+    var user = Context.Session.GetUser();
+    var returnUrl = Context.Request.Path.Value;
+}
+
+<a asp-controller="Home" asp-action="Index" class="rd-back">&larr; All events</a>
+
+<div class="rd-event-header">
+    @if (!string.IsNullOrEmpty(Model.Event.BannerUrl))
+    {
+        <img src="@Model.Event.BannerUrl" alt="Banner for @Model.Event.EventName" class="rd-banner" />
+    }
+    else
+    {
+        <div class="rd-banner rd-banner--placeholder"><span class="rd-card-distance">@Format.Distance(Model.Event.DistanceKm)</span></div>
+    }
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <span class="@Format.TypeCss(Model.Event.EventType)">@Model.Event.EventType</span>
+        <h1 class="rd-display mt-2">@Model.Event.EventName</h1>
+        <dl class="rd-facts">
+            <div><dt>Date</dt><dd>@Format.Date(Model.Event.EventDate)</dd></div>
+            <div><dt>Location</dt><dd>@Model.Event.Location</dd></div>
+            <div><dt>Distance</dt><dd>@Format.Distance(Model.Event.DistanceKm)</dd></div>
+            <div><dt>Organiser</dt><dd>@Model.Event.OrganiserName</dd></div>
+        </dl>
+        @if (!string.IsNullOrWhiteSpace(Model.Event.Description))
+        {
+            <p class="rd-lead-text">@Model.Event.Description</p>
+        }
+    </div>
+
+    <div class="col-lg-5">
+        <div class="rd-panel">
+            <h2 class="h5 mb-3">Choose your category</h2>
+
+            @if (Model.Categories.Count == 0)
+            {
+                <p class="mb-0 text-muted">The organiser has not added any categories yet.</p>
+            }
+
+            @foreach (var category in Model.Categories)
+            {
+                var enrolled = Model.EnrolledCategoryIds.Contains(category.CategoryId);
+                <div class="rd-category">
+                    <div>
+                        <div class="fw-semibold">@category.CategoryName</div>
+                        <div class="rd-meta">@Format.Distance(category.DistanceKm) &middot; @Format.Money(category.EntryFee)</div>
+                        <div class="rd-meta">@(category.IsFull ? "Full" : category.SpotsLeft + " of " + category.MaxParticipants + " spots left")</div>
+                    </div>
+                    <div class="text-end">
+                        @if (user is null)
+                        {
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-sm rd-btn-outline">Log in to enter</a>
+                        }
+                        else if (user.IsParticipant)
+                        {
+                            if (enrolled)
+                            {
+                                <span class="rd-status rd-status--confirmed">Enrolled</span>
+                            }
+                            else if (category.IsFull)
+                            {
+                                <span class="rd-status rd-status--cancelled">Full</span>
+                            }
+                            else
+                            {
+                                <form asp-controller="Events" asp-action="Enrol" method="post"
+                                      data-confirm="Enter @category.CategoryName (@Format.Money(category.EntryFee))?">
+                                    <input type="hidden" name="eventId" value="@Model.Event.EventId" />
+                                    <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                                    <button type="submit" class="btn btn-sm rd-btn-primary">Enter</button>
+                                </form>
+                            }
+                        }
+                        else
+                        {
+                            <span class="rd-meta">Organisers cannot enter</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
