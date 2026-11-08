@@ -1,0 +1,557 @@
+/* RaceDay brand: asphalt, race-bib orange, course green, timing gold. */
+:root {
+    --ink: #191b1d;
+    --paper: #f5f2ea;
+    --bib: #ff5a36;
+    --bib-dark: #e0482a;
+    --course: #3b6255;
+    --course-dark: #2f4f44;
+    --gold: #e8b23d;
+    --line: #d8d3c4;
+    --grey: #6b7075;
+    --card: #ffffff;
+    --bs-body-bg: var(--paper);
+    --bs-body-color: var(--ink);
+    --bs-body-font-family: 'Inter', system-ui, sans-serif;
+    --bs-link-color: var(--course);
+    --bs-link-hover-color: var(--course-dark);
+}
+
+html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.rd-main {
+    flex: 1;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 700;
+}
+
+.rd-display, .rd-display-sm, .rd-logo, .rd-stat-num, .rd-big-code, .rd-card-distance {
+    font-family: 'Anton', 'Impact', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    font-weight: 400;
+}
+
+.rd-display {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.02;
+}
+
+.rd-display-sm {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1.1;
+}
+
+.rd-accent {
+    color: var(--bib);
+}
+
+.rd-eyebrow {
+    color: var(--course);
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.rd-meta {
+    color: var(--grey);
+    font-size: .9rem;
+}
+
+.rd-mono {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.rd-lead {
+    font-size: 1.1rem;
+    color: #43474a;
+    max-width: 34rem;
+}
+
+.rd-lead-text {
+    font-size: 1.05rem;
+    color: #43474a;
+}
+
+/* navigation */
+.rd-nav {
+    background: var(--ink);
+    border-bottom: 3px solid var(--bib);
+}
+
+    .rd-nav .nav-link, .rd-nav .navbar-brand {
+        color: #e9e6dc;
+    }
+
+        .rd-nav .nav-link:hover {
+            color: #fff;
+        }
+
+.rd-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.4rem;
+    color: var(--paper) !important;
+}
+
+.rd-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bib);
+    display: inline-block;
+}
+
+.navbar-toggler {
+    border-color: #555;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.rd-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .8rem;
+}
+
+.rd-role-badge {
+    background: #34383b;
+    color: #e9e6dc;
+    font-weight: 500;
+}
+
+/* buttons */
+.rd-btn-primary {
+    background: var(--bib);
+    border: 2px solid var(--bib);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 3px;
+}
+
+    .rd-btn-primary:hover {
+        background: var(--bib-dark);
+        border-color: var(--bib-dark);
+        color: #fff;
+    }
+
+.rd-btn-outline {
+    background: transparent;
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    font-weight: 600;
+    border-radius: 3px;
+}
+
+    .rd-btn-outline:hover {
+        background: var(--ink);
+        color: var(--paper);
+    }
+
+.rd-btn-light {
+    background: transparent;
+    border: 2px solid #8b8f93;
+    color: #e9e6dc;
+    font-weight: 600;
+    border-radius: 3px;
+}
+
+    .rd-btn-light:hover {
+        background: #e9e6dc;
+        color: var(--ink);
+    }
+
+.rd-btn-danger {
+    background: transparent;
+    border: 2px solid #c8412b;
+    color: #c8412b;
+    font-weight: 600;
+    border-radius: 3px;
+}
+
+    .rd-btn-danger:hover {
+        background: #c8412b;
+        color: #fff;
+    }
+
+.rd-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.rd-back {
+    display: inline-block;
+    color: var(--grey);
+    text-decoration: none;
+    font-size: .9rem;
+}
+
+    .rd-back:hover {
+        color: var(--ink);
+    }
+
+/* hero */
+.rd-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem 0 2rem;
+}
+
+.rd-hero-num {
+    position: absolute;
+    right: -1rem;
+    top: -2.5rem;
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(8rem, 28vw, 18rem);
+    line-height: 1;
+    opacity: .06;
+    pointer-events: none;
+    user-select: none;
+}
+
+.rd-hero > * {
+    position: relative;
+}
+
+/* panels, filters, cards */
+.rd-panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.rd-filters {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.rd-empty {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.rd-big-code {
+    font-size: 4.5rem;
+    color: var(--bib);
+    margin-bottom: 0;
+}
+
+.rd-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--card);
+    transition: transform .15s, box-shadow .15s;
+}
+
+    .rd-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -14px rgba(0,0,0,.45);
+    }
+
+.rd-card-img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+}
+
+.rd-card-img--placeholder, .rd-banner--placeholder {
+    background: linear-gradient(135deg, var(--course) 0%, #24423a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rd-card-distance {
+    color: rgba(255,255,255,.85);
+    font-size: 2.2rem;
+}
+
+.rd-card-title {
+    font-weight: 700;
+}
+
+/* event details */
+.rd-banner {
+    width: 100%;
+    max-height: 340px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.rd-banner-thumb {
+    max-height: 110px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+}
+
+.rd-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: .75rem 1.5rem;
+    margin: 1.25rem 0;
+}
+
+    .rd-facts dt {
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--grey);
+        font-weight: 600;
+    }
+
+    .rd-facts dd {
+        margin: 0;
+        font-weight: 600;
+    }
+
+.rd-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: .9rem 0;
+    border-top: 1px solid var(--line);
+}
+
+    .rd-category:first-of-type {
+        border-top: none;
+    }
+
+/* tables */
+.rd-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.rd-table thead th {
+    background: #ece8dc;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--grey);
+    border-bottom: 1px solid var(--line);
+}
+
+.rd-inline-form {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+    .rd-inline-form .form-control {
+        max-width: 160px;
+    }
+
+/* colour-coded statuses and event types */
+.rd-status {
+    display: inline-block;
+    padding: .25rem .65rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.rd-status--confirmed {
+    background: #dcefe3;
+    color: #1e6b3a;
+}
+
+.rd-status--pending {
+    background: #fdebc0;
+    color: #8a5a00;
+}
+
+.rd-status--cancelled {
+    background: #f9d9d3;
+    color: #a2321f;
+}
+
+.rd-status--completed {
+    background: #1f2326;
+    color: var(--gold);
+}
+
+.rd-type {
+    display: inline-block;
+    padding: .15rem .6rem;
+    border-radius: 3px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--grey);
+}
+
+.rd-type--run {
+    background: var(--bib);
+}
+
+.rd-type--walk {
+    background: var(--course);
+}
+
+.rd-type--cycle {
+    background: #c98f1a;
+}
+
+/* stats and results */
+.rd-stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.rd-stat-num {
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--course);
+}
+
+.rd-stat-label {
+    color: var(--grey);
+    font-size: .85rem;
+    margin-top: .3rem;
+}
+
+.rd-next {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-left: 5px solid var(--bib);
+}
+
+.rd-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.rd-position {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: .4rem;
+    color: var(--grey);
+}
+
+.rd-pos-badge {
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    padding: .2rem .6rem;
+    border-radius: 20px;
+}
+
+/* forms and profile */
+.form-control:focus, .form-select:focus {
+    border-color: var(--course);
+    box-shadow: 0 0 0 .2rem rgba(59, 98, 85, .2);
+}
+
+.rd-role-choice {
+    border: 2px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: .8rem;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.btn-check:checked + .rd-role-choice {
+    border-color: var(--course);
+    background: #e8f0ec;
+}
+
+.rd-profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--gold);
+}
+
+.rd-profile-img--placeholder {
+    background: var(--course);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    font-size: 3rem;
+}
+
+.field-validation-error, .validation-summary-errors {
+    color: #b3261e;
+}
+
+.input-validation-error {
+    border-color: #b3261e;
+}
+
+/* footer */
+.rd-footer {
+    border-top: 1px solid var(--line);
+    padding: 1.5rem 0;
+}
+
+    .rd-footer .rd-logo {
+        color: var(--ink) !important;
+        font-size: 1.1rem;
+    }
+
+.rd-alert {
+    border-radius: 6px;
+}
+
+/* event details header and result cards (used by Events/Details and Participant/MyResults) */
+.rd-event-header {
+    margin-bottom: 1.25rem;
+}
+
+.rd-result-card {
+    border-top: 4px solid var(--gold);
+}
