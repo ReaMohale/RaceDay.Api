@@ -6,6 +6,8 @@ using RaceDay.Api.Dtos;
 using RaceDay.Api.Models;
 using RaceDay.Api.Security;
 using RaceDay.Api.Services;
+using RegisterRequest = RaceDay.Api.Dtos.RegisterRequest;
+using LoginRequest = RaceDay.Api.Dtos.LoginRequest;
 
 namespace RaceDay.Api.Controllers;
 
